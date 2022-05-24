@@ -27,6 +27,7 @@ async function run() {
         const partsCollection = client.db('bikeParts').collection('parts');
         const userCollection = client.db('bikeParts').collection('users');
 
+
         app.get('/parts', async (req, res) => {
             const query = {};
             const cursor = partsCollection.find(query);
@@ -36,13 +37,16 @@ async function run() {
 
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
+            console.log(email);
             const user = req.body;
+            console.log(user);
             const filter = { email: email };
             const options = { upsert: true };
             const updateDoc = {
                 $set: user,
             };
             const result = await userCollection.updateOne(filter, updateDoc, options);
+
             res.send(result);
         })
 
