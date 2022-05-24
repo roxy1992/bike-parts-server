@@ -25,6 +25,7 @@ async function run() {
     try {
         await client.connect();
         const partsCollection = client.db('bikeParts').collection('parts');
+        const userCollection = client.db('bikeParts').collection('users');
 
         app.get('/parts', async (req, res) => {
             const query = {};
@@ -32,6 +33,20 @@ async function run() {
             const parts = await cursor.toArray();
             res.send(parts);
         });
+
+        app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user,
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        })
+
+        //partsId//
 
         app.get('/parts/:id', async (req, res) => {
             const id = req.params.id;
