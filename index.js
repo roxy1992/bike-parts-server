@@ -89,6 +89,22 @@ async function run() {
             const parts = await partsCollection.findOne(query);
             res.send(parts);
         });
+
+        //post
+        app.post('/parts', async (req, res) => {
+            const newParts = req.body;
+            const result = await partsCollection.insertOne(newParts);
+            res.send(result);
+        })
+
+        //delete
+        app.delete('/parts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await partsCollection.deleteOne(query);
+            res.send(result);
+        });
+
     }
     finally {
 
